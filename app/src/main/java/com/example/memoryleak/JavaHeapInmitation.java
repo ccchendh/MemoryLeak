@@ -94,7 +94,7 @@ public class JavaHeapInmitation extends AppCompatActivity implements View.OnClic
         tmpHeapSize = maxHeapSize;
         tv1.setText(String.valueOf(tmpHeapSize));
         tv2.setText("XXX");
-        t = new MyThread1();
+
     }
 
     @Override
@@ -104,6 +104,7 @@ public class JavaHeapInmitation extends AppCompatActivity implements View.OnClic
             finish();
         }
         else if(v.getId() == R.id.start){
+            t = new MyThread1();
             t.start();
         }
         else{

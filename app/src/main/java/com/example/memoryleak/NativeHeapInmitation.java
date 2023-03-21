@@ -31,7 +31,7 @@ public class NativeHeapInmitation extends AppCompatActivity implements View.OnCl
 
     private List<byte[]> memoryBlocks;
 
-    private MyThread2 t;
+    private static MyThread2 t;
 
     private class MyThread2 extends Thread {
         private Timer timer = new Timer();
@@ -95,7 +95,6 @@ public class NativeHeapInmitation extends AppCompatActivity implements View.OnCl
         tmpHeapSize = maxHeapSize;
         tv1.setText(String.valueOf(tmpHeapSize));
         tv2.setText("XXX");
-        t = new MyThread2();
 
     }
 
@@ -105,6 +104,7 @@ public class NativeHeapInmitation extends AppCompatActivity implements View.OnCl
             finish();
         }
         else if(v.getId() == R.id.start){
+            t = new MyThread2();
             t.start();
         }
         else{
