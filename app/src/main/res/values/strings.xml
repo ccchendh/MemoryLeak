@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">内存泄露模拟工具</string>
-    <string name="JavaHeap_imitation">模拟Java内存泄露</string>
-    <string name="NativeHeap_imitation">模拟Native内存泄露</string>
-    <string name="Set_amount">设置内存泄露总量: </string>
-    <string name="Set_time">设置泄露持续时长: </string>
+    <string name="app_name">内存泄漏模拟工具</string>
+    <string name="JavaHeap_imitation">模拟Java内存泄漏</string>
+    <string name="NativeHeap_imitation">模拟Native内存泄漏</string>
+    <string name="Set_amount">设置内存泄漏总量: </string>
+    <string name="Set_time">设置泄漏持续时长: </string>
     <string name="MB">MB</string>
     <string name="s">s</string>
     <string name="start">开始模拟</string>

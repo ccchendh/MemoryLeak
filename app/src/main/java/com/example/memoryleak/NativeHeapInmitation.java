@@ -2,18 +2,18 @@ package com.example.memoryleak;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Debug;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.leak.NativeHeapLeak;
+import com.example.utils.MemoryUtils;
+
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,47 +26,60 @@ public class NativeHeapInmitation extends AppCompatActivity implements View.OnCl
     private TextView tv1;
     private TextView tv2;
     private boolean isImitating;
-    private long maxHeapSize;
-    private long tmpHeapSize;
-
-    private List<byte[]> memoryBlocks;
-
-    private static MyThread2 t;
+//    private long maxHeapSize;
+//    private long tmpHeapSize;
+//
+//    private List<byte[]> memoryBlocks;
+//
 
     private class MyThread2 extends Thread {
-        private Timer timer = new Timer();
+        private final Timer timer = new Timer();
         public void run() {
             int amount = Integer.parseInt(edt1.getText().toString());
-            int time_per_MB = Integer.parseInt(edt2.getText().toString()) * 1000 / amount ;
-            if(amount  > maxHeapSize)
-                return;
-            btn2.post(new Runnable() {
-                @Override
-                public void run() {
-                    btn2.setEnabled(true);
-                }
-            });
-            btn1.post(new Runnable() {
-                @Override
-                public void run() {
-                    btn1.setEnabled(false);
-                }
-            });
+            int time = Integer.parseInt(edt2.getText().toString());
+//            btn2.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    btn2.setEnabled(true);
+//                }
+//            });
+//            btn1.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    btn1.setEnabled(false);
+//                }
+//            });
+            btn1.post(() -> btn1.setEnabled(false));
+            btn2.post(() -> btn2.setEnabled(true));
             isImitating = true;
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    byte[] s = new byte[1000000];
-                    memoryBlocks.add(s);
-                    tmpHeapSize--;
-                    tv1.setText(String.valueOf(tmpHeapSize));
+                    tv1.setText(String.valueOf(Debug.getNativeHeapAllocatedSize()/(1024*1024)));
+                    tv2.setText(String.valueOf(MemoryUtils.getPssMemory()/1024));
                 }
-            }, time_per_MB, time_per_MB);
-            while (!(Debug.getNativeHeapAllocatedSize() < maxHeapSize)&& isImitating && maxHeapSize-tmpHeapSize < amount)
-            {
+            }, 5000L, 5000L);
+            int need;
+            //5s泄漏量
+            need = amount / time * 5;
+            while(amount > 0 && isImitating) {
+                if(amount >= need) {
+                    amount -= need;
+                } else {
+                    //最后一次泄漏量
+                    need = amount;
+                    amount = 0;
+                }
+                for(int i = 0; i < need; ++i) {
+                    NativeHeapLeak.excute();
+                }
+                try {
+                    Thread.sleep(5000L);
+                } catch (InterruptedException e) {
+                    System.err.println("sleep() 函数抛出了 InterruptedException 异常：" + e.getMessage());
+                }
             }
             timer.cancel();
-            return;
         }
     }
 
@@ -89,12 +102,13 @@ public class NativeHeapInmitation extends AppCompatActivity implements View.OnCl
         back.setOnClickListener(this);
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
-        memoryBlocks = new ArrayList<>();
+//        memoryBlocks = new ArrayList<>();
         isImitating = false;
-        maxHeapSize = Debug.getNativeHeapSize()/1000000;
-        tmpHeapSize = maxHeapSize;
-        tv1.setText(String.valueOf(tmpHeapSize));
-        tv2.setText("XXX");
+//        maxHeapSize = Debug.getNativeHeapSize()/1000000;
+//        tmpHeapSize = maxHeapSize;
+        NativeHeapLeak.vec = new ArrayList<>();
+        tv1.setText(String.valueOf(Debug.getNativeHeapAllocatedSize()/(1024*1024)));
+        tv2.setText(String.valueOf(MemoryUtils.getPssMemory()/1024));
 
     }
 
@@ -104,17 +118,35 @@ public class NativeHeapInmitation extends AppCompatActivity implements View.OnCl
             finish();
         }
         else if(v.getId() == R.id.start){
-            t = new MyThread2();
+            MyThread2 t = new MyThread2();
             t.start();
+//            btn1.setEnabled(false);
+//            btn2.setEnabled(true);
+//            Timer timer = new Timer();
+//            timer.schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    tv1.setText(String.valueOf(Debug.getNativeHeapAllocatedSize()/(1024*1024)));
+//                }
+//            }, 5000L, 5000L);
+//            int amount = Integer.parseInt(edt1.getText().toString());
+//            int time = Integer.parseInt(edt2.getText().toString());
+//            try {
+//                leak.toLeak(amount, time);
+//            } catch (InterruptedException e) {
+//                System.err.println("toLeak() 函数抛出了 InterruptedException 异常：" + e.getMessage());
+//            }
         }
         else{
             isImitating = false;
-            for (byte[] block : memoryBlocks) {
-                block = null;
-            }
-            memoryBlocks.clear();
-            tmpHeapSize = maxHeapSize;
-            tv1.setText(String.valueOf(tmpHeapSize));
+//            for (byte[] block : memoryBlocks) {
+//                block = null;
+//            }
+//            memoryBlocks.clear();
+//            tmpHeapSize = maxHeapSize;
+            NativeHeapLeak.toReclaim();
+            tv1.setText(String.valueOf(Debug.getNativeHeapAllocatedSize()/(1024*1024)));
+            tv2.setText(String.valueOf(MemoryUtils.getPssMemory()/1024));
             btn1.setEnabled(true);
             btn2.setEnabled(false);
         }
