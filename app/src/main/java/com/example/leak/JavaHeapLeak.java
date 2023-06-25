@@ -34,6 +34,6 @@ public class JavaHeapLeak {
 //        }
 //    }
     public static void toReclaim() {
-//        vec.clear();
+        vec.clear();
     }
 }
