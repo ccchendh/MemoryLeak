@@ -1,22 +1,25 @@
 package com.example.memoryleak;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.leak.JavaHeapLeak;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.leak.NativeHeapLeakBitmap;
+import com.example.leak.NativeHeapLeakMalloc;
 import com.example.utils.MemoryUtils;
 
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class JavaHeapInmitation extends AppCompatActivity implements View.OnClickListener{
+public class NativeHeapImitationBitmap extends AppCompatActivity implements View.OnClickListener {
 
     private Button btn1;
     private Button btn2;
@@ -25,18 +28,17 @@ public class JavaHeapInmitation extends AppCompatActivity implements View.OnClic
     private TextView tv1;
     private TextView tv2;
     private boolean isImitating;
-
 //    private long maxHeapSize;
 //    private long tmpHeapSize;
-//    private List<String> list;
+//
+//    private List<byte[]> memoryBlocks;
+//
 
-    private class MyThread1 extends Thread {
+    private class NativeHeapLeakBitmapThread extends Thread {
         private final Timer timer = new Timer();
         public void run() {
             int amount = Integer.parseInt(edt1.getText().toString());
-            int time = Integer.parseInt(edt2.getText().toString()) ;
-            if(amount  > 200)
-                amount = 200;
+            int time = Integer.parseInt(edt2.getText().toString());
 //            btn2.post(new Runnable() {
 //                @Override
 //                public void run() {
@@ -55,7 +57,7 @@ public class JavaHeapInmitation extends AppCompatActivity implements View.OnClic
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    tv1.setText(String.valueOf((Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory())/(1024*1024)));
+                    tv1.setText(String.valueOf(Debug.getNativeHeapAllocatedSize()/(1024*1024)));
                     tv2.setText(String.valueOf(MemoryUtils.getPssMemory()/1024));
                 }
             }, 5000L, 5000L);
@@ -71,7 +73,7 @@ public class JavaHeapInmitation extends AppCompatActivity implements View.OnClic
                     amount = 0;
                 }
                 for(int i = 0; i < need; ++i) {
-                    JavaHeapLeak.excute();
+                    NativeHeapLeakBitmap.excute();
                 }
                 try {
                     Thread.sleep(5000L);
@@ -86,15 +88,15 @@ public class JavaHeapInmitation extends AppCompatActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_java_heap_inmitation);
+        setContentView(R.layout.activity_native_heap_imitation);
 
         ImageButton back = findViewById(R.id.back);
         btn1 = findViewById(R.id.start);
         btn2 = findViewById(R.id.end);
-        edt1 = findViewById(R.id.Java_edittext_MB);
-        edt2 = findViewById((R.id.Java_edittext_s));
-        tv1 = findViewById(R.id.JavaHeapAmount);
-        tv2 = findViewById(R.id.JavaPSSAmount);
+        edt1 = findViewById(R.id.Native_edittext_MB);
+        edt2 = findViewById((R.id.Native_edittext_s));
+        tv1 = findViewById(R.id.NativeHeapAmount);
+        tv2 = findViewById(R.id.NativePSSAmount);
 
         btn1.setEnabled(true);
         btn2.setEnabled(false);
@@ -102,24 +104,23 @@ public class JavaHeapInmitation extends AppCompatActivity implements View.OnClic
         back.setOnClickListener(this);
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
-//        list = new ArrayList<>();
-        JavaHeapLeak.vec = new ArrayList<>();
+//        memoryBlocks = new ArrayList<>();
         isImitating = false;
-//        maxHeapSize = (Runtime.getRuntime().totalMemory()/(1024*1024));
+//        maxHeapSize = Debug.getNativeHeapSize()/1000000;
 //        tmpHeapSize = maxHeapSize;
-        tv1.setText(String.valueOf(((Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory())/(1024*1024))));
+        NativeHeapLeakBitmap.vec = new ArrayList<>();
+        tv1.setText(String.valueOf(Debug.getNativeHeapAllocatedSize()/(1024*1024)));
         tv2.setText(String.valueOf(MemoryUtils.getPssMemory()/1024));
 
     }
 
     @Override
     public void onClick(View v){
-
         if(v.getId() == R.id.back){
             finish();
         }
         else if(v.getId() == R.id.start){
-            MyThread1 t = new MyThread1();
+            NativeHeapLeakBitmapThread t = new NativeHeapLeakBitmapThread();
             t.start();
 //            btn1.setEnabled(false);
 //            btn2.setEnabled(true);
@@ -127,7 +128,7 @@ public class JavaHeapInmitation extends AppCompatActivity implements View.OnClic
 //            timer.schedule(new TimerTask() {
 //                @Override
 //                public void run() {
-//                    tv1.setText(String.valueOf((Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory())/(1024*1024)));
+//                    tv1.setText(String.valueOf(Debug.getNativeHeapAllocatedSize()/(1024*1024)));
 //                }
 //            }, 5000L, 5000L);
 //            int amount = Integer.parseInt(edt1.getText().toString());
@@ -140,9 +141,13 @@ public class JavaHeapInmitation extends AppCompatActivity implements View.OnClic
         }
         else{
             isImitating = false;
-            JavaHeapLeak.toReclaim();
+//            for (byte[] block : memoryBlocks) {
+//                block = null;
+//            }
+//            memoryBlocks.clear();
 //            tmpHeapSize = maxHeapSize;
-            tv1.setText(String.valueOf((Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory())/(1024*1024)));
+            NativeHeapLeakBitmap.toReclaim();
+            tv1.setText(String.valueOf(Debug.getNativeHeapAllocatedSize()/(1024*1024)));
             tv2.setText(String.valueOf(MemoryUtils.getPssMemory()/1024));
             btn1.setEnabled(true);
             btn2.setEnabled(false);

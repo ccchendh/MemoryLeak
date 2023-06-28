@@ -2,7 +2,7 @@ package com.example.leak;
 
 import java.util.List;
 
-public class JavaHeapLeak {
+public class JavaHeapLeakString {
     public static List<String> vec;
     public static void excute () {
 

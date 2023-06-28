@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
 
-        Button btn1 = findViewById(R.id.JavaHeap_imitation);
+        Button btn1 = findViewById(R.id.JavaHeap);
         Button btn2 = findViewById(R.id.NativeHeap_imitation);
 
         btn1.setOnClickListener(this);
@@ -25,11 +25,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v){
-        if(v.getId() == R.id.JavaHeap_imitation){
-            startActivity(new Intent(this, JavaHeapInmitation.class));
+        if(v.getId() == R.id.JavaHeap){
+            startActivity(new Intent(this, JavaHeap.class));
         }
         else{
-            startActivity(new Intent(this, NativeHeapInmitation.class));
+            startActivity(new Intent(this, NativeHeap.class));
         }
     }
 }

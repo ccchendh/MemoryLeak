@@ -1,7 +1,12 @@
 <resources>
     <string name="app_name">内存泄漏模拟工具</string>
     <string name="JavaHeap_imitation">模拟Java内存泄漏</string>
+    <string name="JavaHeap_imitation_string">创建对象</string>
+    <string name="JavaHeap_imitation_openfile">打开文件流</string>
+    <string name="JavaHeap_imitation_3">内部类</string>
     <string name="NativeHeap_imitation">模拟Native内存泄漏</string>
+    <string name="Native_imitation_malloc">调用malloc</string>
+    <string name="Native_imitation_BitMap">创建BitMap</string>
     <string name="Set_amount">设置内存泄漏总量: </string>
     <string name="Set_time">设置泄漏持续时长: </string>
     <string name="MB">MB</string>

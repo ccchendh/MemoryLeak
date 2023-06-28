@@ -6,46 +6,46 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="50dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/app_name"
-            android:textSize="40sp"
-            android:textColor="@color/black"
-            android:gravity="center"/>
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/back"
+            android:scaleType="fitStart"
+            android:background="@color/white">
+
+        </ImageButton>
 
     </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:gravity="bottom|center">
 
         <Button
-            android:id="@+id/JavaHeap"
+            android:id="@+id/NativeHeapImitationMalloc"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="@string/JavaHeap_imitation"
+            android:text="@string/Native_imitation_malloc"
             android:textSize="20sp"
             android:textAllCaps="false"/>
 
     </LinearLayout>
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:gravity="top|center">
+        android:gravity="center">
 
         <Button
-            android:id="@+id/NativeHeap_imitation"
+            android:id="@+id/NativeHeapImitationBitmap"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="@string/NativeHeap_imitation"
+            android:text="@string/Native_imitation_BitMap"
             android:textSize="20sp"
             android:textAllCaps="false"/>
 
