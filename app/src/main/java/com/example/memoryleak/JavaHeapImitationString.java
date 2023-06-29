@@ -71,7 +71,7 @@ public class JavaHeapImitationString extends AppCompatActivity implements View.O
                     amount = 0;
                 }
                 for(int i = 0; i < need; ++i) {
-                    JavaHeapLeakString.excute();
+                    JavaHeapLeakString.toLeak();
                 }
                 try {
                     Thread.sleep(5000L);
@@ -103,7 +103,6 @@ public class JavaHeapImitationString extends AppCompatActivity implements View.O
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
 //        list = new ArrayList<>();
-        JavaHeapLeakString.vec = new ArrayList<>();
         isImitating = false;
 //        maxHeapSize = (Runtime.getRuntime().totalMemory()/(1024*1024));
 //        tmpHeapSize = maxHeapSize;
@@ -119,6 +118,7 @@ public class JavaHeapImitationString extends AppCompatActivity implements View.O
             finish();
         }
         else if(v.getId() == R.id.start){
+            JavaHeapLeakString.vec = new ArrayList<>();
             JavaHeapLeakStringThread t = new JavaHeapLeakStringThread();
             t.start();
 //            btn1.setEnabled(false);

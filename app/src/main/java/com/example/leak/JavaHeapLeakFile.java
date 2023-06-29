@@ -6,13 +6,10 @@ public class JavaHeapLeakFile {
 
     public static List<String> vec;
 
-    public static void excute () {
+    public static void toLeak () {
 
     }
 
-    public void toLeak(int count, int time) throws InterruptedException {
-
-    }
 
     public static void toReclaim() {
 

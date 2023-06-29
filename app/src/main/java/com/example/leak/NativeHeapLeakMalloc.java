@@ -6,7 +6,7 @@ import java.util.List;
 public class NativeHeapLeakMalloc {
     public static List<Long> vec;
 
-    public static void excute () {
+    public static void toLeak () {
         long ptr = NativeHeapJNI.m_malloc(1024*1024);
         vec.add(ptr);
     }
@@ -32,8 +32,8 @@ public class NativeHeapLeakMalloc {
 //        Log.d("Tag","222222222222");
 //    }
     public static void toReclaim() {
-        for (int i = 0; i < vec.size(); i++) {
-            NativeHeapJNI.m_free(vec.get(i));
+        for (long ptr : vec) {
+            NativeHeapJNI.m_free(ptr);
         }
         vec.clear();
     }

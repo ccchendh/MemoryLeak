@@ -71,7 +71,7 @@ public class JavaHeapImitationFile extends AppCompatActivity implements View.OnC
                     amount = 0;
                 }
                 for(int i = 0; i < need; ++i) {
-                    JavaHeapLeakFile.excute();
+                    JavaHeapLeakFile.toLeak();
                 }
                 try {
                     Thread.sleep(5000L);

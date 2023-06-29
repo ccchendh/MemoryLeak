@@ -13,6 +13,7 @@ import com.example.leak.JavaHeapLeakInnerClass;
 import com.example.utils.MemoryUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,10 +27,12 @@ public class JavaHeapImitationInnerclass extends AppCompatActivity implements Vi
     private TextView tv2;
     private boolean isImitating;
 
+    public static List<Object> vec;
+    private static JavaHeapLeakInnerClass leak;
+
 //    private long maxHeapSize;
 //    private long tmpHeapSize;
 //    private List<String> list;
-
     private class JavaHeapLeakInnerClassThread extends Thread {
         private final Timer timer = new Timer();
         public void run() {
@@ -71,7 +74,7 @@ public class JavaHeapImitationInnerclass extends AppCompatActivity implements Vi
                     amount = 0;
                 }
                 for(int i = 0; i < need; ++i) {
-                    JavaHeapLeakInnerClass.excute();
+                    leak.toLeak();
                 }
                 try {
                     Thread.sleep(5000L);
@@ -103,8 +106,9 @@ public class JavaHeapImitationInnerclass extends AppCompatActivity implements Vi
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
 //        list = new ArrayList<>();
-        JavaHeapLeakInnerClass.vec = new ArrayList<>();
         isImitating = false;
+        leak = new JavaHeapLeakInnerClass();
+        vec = new ArrayList<>();
 //        maxHeapSize = (Runtime.getRuntime().totalMemory()/(1024*1024));
 //        tmpHeapSize = maxHeapSize;
         tv1.setText(String.valueOf(((Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory())/(1024*1024))));
@@ -140,7 +144,7 @@ public class JavaHeapImitationInnerclass extends AppCompatActivity implements Vi
         }
         else{
             isImitating = false;
-            JavaHeapLeakInnerClass.toReclaim();
+            leak.toReclaim();
 //            tmpHeapSize = maxHeapSize;
             tv1.setText(String.valueOf((Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory())/(1024*1024)));
             tv2.setText(String.valueOf(MemoryUtils.getPssMemory()/1024));

@@ -69,7 +69,7 @@ public class NativeHeapImitationMalloc extends AppCompatActivity implements View
                     amount = 0;
                 }
                 for(int i = 0; i < need; ++i) {
-                    NativeHeapLeakMalloc.excute();
+                    NativeHeapLeakMalloc.toLeak();
                 }
                 try {
                     Thread.sleep(5000L);

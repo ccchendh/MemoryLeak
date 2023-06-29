@@ -3,8 +3,8 @@ package com.example.leak;
 import java.util.List;
 
 public class JavaHeapLeakString {
-    public static List<String> vec;
-    public static void excute () {
+    public static List<String> vec = null;
+    public static void toLeak () {
 
         StringBuilder sb=new StringBuilder();
         for (int i = 0; i < 1024 * 512 - 20; i++) {
@@ -35,5 +35,6 @@ public class JavaHeapLeakString {
 //    }
     public static void toReclaim() {
         vec.clear();
+        vec = null;
     }
 }

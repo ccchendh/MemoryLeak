@@ -1,20 +1,21 @@
 package com.example.leak;
 
+import com.example.memoryleak.JavaHeapImitationInnerclass;
+
 import java.util.List;
 
 public class JavaHeapLeakInnerClass {
 
-    public static List<String> vec;
+    public  void toLeak () {
+        class Test{
+            char[] c = new char[1024 * 512];
+        };
+        Test test= new Test();
 
-    public static void excute () {
-
+        JavaHeapImitationInnerclass.vec.add(test);
     }
 
-    public void toLeak(int count, int time) throws InterruptedException {
-
-    }
-
-    public static void toReclaim() {
-
+    public  void toReclaim() {
+        JavaHeapImitationInnerclass.vec.clear();
     }
 }

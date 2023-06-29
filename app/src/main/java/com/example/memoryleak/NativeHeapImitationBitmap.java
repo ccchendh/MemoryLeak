@@ -73,7 +73,7 @@ public class NativeHeapImitationBitmap extends AppCompatActivity implements View
                     amount = 0;
                 }
                 for(int i = 0; i < need; ++i) {
-                    NativeHeapLeakBitmap.excute();
+                    NativeHeapLeakBitmap.toLeak();
                 }
                 try {
                     Thread.sleep(5000L);
