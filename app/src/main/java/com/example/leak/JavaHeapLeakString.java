@@ -1,18 +1,16 @@
 package com.example.leak;
 
+import com.example.memoryleak.JavaHeapImitationString;
+
 import java.util.List;
 
 public class JavaHeapLeakString {
-    public static List<String> vec = null;
-    public static void toLeak () {
 
-        StringBuilder sb=new StringBuilder();
-        for (int i = 0; i < 1024 * 512 - 20; i++) {
-            sb.append("\0");
-        }
-        String s = sb.toString();
+    public void toLeak () {
 
-        vec.add(s);
+        char[] s = new char[1024*512];
+
+        JavaHeapImitationString.vec.add(s);
     }
 //    public void toLeak(int count, int time) throws InterruptedException {
 //        vec = new ArrayList<>();
@@ -33,8 +31,8 @@ public class JavaHeapLeakString {
 //            Thread.sleep(5000L);
 //        }
 //    }
-    public static void toReclaim() {
-        vec.clear();
-        vec = null;
+    public void toReclaim() {
+        JavaHeapImitationString.vec.clear();
+        JavaHeapImitationString.vec = null;
     }
 }

@@ -13,6 +13,7 @@ import com.example.leak.JavaHeapLeakString;
 import com.example.utils.MemoryUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -25,6 +26,9 @@ public class JavaHeapImitationString extends AppCompatActivity implements View.O
     private TextView tv1;
     private TextView tv2;
     private boolean isImitating;
+    public static List<char[]> vec;
+    private JavaHeapLeakString leak;
+    private JavaHeapLeakStringThread t;
 
 //    private long maxHeapSize;
 //    private long tmpHeapSize;
@@ -33,6 +37,9 @@ public class JavaHeapImitationString extends AppCompatActivity implements View.O
     private class JavaHeapLeakStringThread extends Thread {
         private final Timer timer = new Timer();
         public void run() {
+            tv1.setText(String.valueOf(MemoryUtils.getJavaHeap()));
+            tv2.setText(String.valueOf(MemoryUtils.getPssMemory()));
+            MemoryUtils.MemoryInfoLog();
             int amount = Integer.parseInt(edt1.getText().toString());
             int time = Integer.parseInt(edt2.getText().toString()) ;
             if(amount  > 200)
@@ -55,13 +62,14 @@ public class JavaHeapImitationString extends AppCompatActivity implements View.O
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    tv1.setText(String.valueOf((Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory())/(1024*1024)));
-                    tv2.setText(String.valueOf(MemoryUtils.getPssMemory()/1024));
+                    tv1.setText(String.valueOf(MemoryUtils.getJavaHeap()));
+                    tv2.setText(String.valueOf(MemoryUtils.getPssMemory()));
+                    MemoryUtils.MemoryInfoLog();
                 }
-            }, 5000L, 5000L);
+            }, 1000L, 1000L);
             int need;
             //5s泄漏量
-            need = amount / time * 5;
+            need = amount / time;
             while(amount > 0 && isImitating) {
                 if(amount >= need) {
                     amount -= need;
@@ -71,13 +79,18 @@ public class JavaHeapImitationString extends AppCompatActivity implements View.O
                     amount = 0;
                 }
                 for(int i = 0; i < need; ++i) {
-                    JavaHeapLeakString.toLeak();
+                    leak.toLeak();
                 }
                 try {
-                    Thread.sleep(5000L);
+                    Thread.sleep(1000L);
                 } catch (InterruptedException e) {
                     System.err.println("sleep() 函数抛出了 InterruptedException 异常：" + e.getMessage());
                 }
+            }
+            try {
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                System.err.println("sleep() 函数抛出了 InterruptedException 异常：" + e.getMessage());
             }
             timer.cancel();
         }
@@ -106,8 +119,8 @@ public class JavaHeapImitationString extends AppCompatActivity implements View.O
         isImitating = false;
 //        maxHeapSize = (Runtime.getRuntime().totalMemory()/(1024*1024));
 //        tmpHeapSize = maxHeapSize;
-        tv1.setText(String.valueOf(((Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory())/(1024*1024))));
-        tv2.setText(String.valueOf(MemoryUtils.getPssMemory()/1024));
+        tv1.setText(String.valueOf(MemoryUtils.getJavaHeap()));
+        tv2.setText(String.valueOf(MemoryUtils.getPssMemory()));
 
     }
 
@@ -118,8 +131,9 @@ public class JavaHeapImitationString extends AppCompatActivity implements View.O
             finish();
         }
         else if(v.getId() == R.id.start){
-            JavaHeapLeakString.vec = new ArrayList<>();
-            JavaHeapLeakStringThread t = new JavaHeapLeakStringThread();
+            leak = new JavaHeapLeakString();
+            vec = new ArrayList<>();
+            t = new JavaHeapLeakStringThread();
             t.start();
 //            btn1.setEnabled(false);
 //            btn2.setEnabled(true);
@@ -140,10 +154,17 @@ public class JavaHeapImitationString extends AppCompatActivity implements View.O
         }
         else{
             isImitating = false;
-            JavaHeapLeakString.toReclaim();
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                System.err.println("join() 函数抛出了 InterruptedException 异常：" + e.getMessage());
+            }
+            leak.toReclaim();
+            leak = null;
+            Runtime.getRuntime().gc();
 //            tmpHeapSize = maxHeapSize;
-            tv1.setText(String.valueOf((Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory())/(1024*1024)));
-            tv2.setText(String.valueOf(MemoryUtils.getPssMemory()/1024));
+            tv1.setText(String.valueOf(MemoryUtils.getJavaHeap()));
+            tv2.setText(String.valueOf(MemoryUtils.getPssMemory()));
             btn1.setEnabled(true);
             btn2.setEnabled(false);
         }

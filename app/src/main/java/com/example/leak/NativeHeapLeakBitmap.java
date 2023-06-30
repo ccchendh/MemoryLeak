@@ -2,21 +2,22 @@ package com.example.leak;
 
 import android.graphics.Bitmap;
 
+import com.example.memoryleak.NativeHeapImitationBitmap;
+
 import java.util.List;
 
 public class NativeHeapLeakBitmap {
 
-    public static List<Bitmap> vec;
-
-    public static void toLeak () {
+    public void toLeak () {
         Bitmap bitmap = Bitmap.createBitmap(512, 512, Bitmap.Config.ARGB_8888);
-        vec.add(bitmap);
+        NativeHeapImitationBitmap.vec.add(bitmap);
     }
 
-    public static void toReclaim() {
-        for (Bitmap bitmap : vec) {
+    public void toReclaim() {
+        for (Bitmap bitmap : NativeHeapImitationBitmap.vec) {
             bitmap.recycle();
         }
-        vec.clear();
+        NativeHeapImitationBitmap.vec.clear();
+        NativeHeapImitationBitmap.vec = null;
     }
 }

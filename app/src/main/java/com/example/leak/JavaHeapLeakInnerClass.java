@@ -6,16 +6,17 @@ import java.util.List;
 
 public class JavaHeapLeakInnerClass {
 
+    public class Test{
+        char[] c = new char[1024 * 512];
+    };
     public  void toLeak () {
-        class Test{
-            char[] c = new char[1024 * 512];
-        };
         Test test= new Test();
 
         JavaHeapImitationInnerclass.vec.add(test);
     }
 
-    public  void toReclaim() {
+    public void toReclaim() {
         JavaHeapImitationInnerclass.vec.clear();
+        JavaHeapImitationInnerclass.vec = null;
     }
 }

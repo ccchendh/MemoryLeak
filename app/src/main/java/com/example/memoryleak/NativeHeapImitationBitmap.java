@@ -1,6 +1,7 @@
 package com.example.memoryleak;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Debug;
 import android.view.View;
@@ -11,11 +12,13 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.leak.JavaHeapLeakString;
 import com.example.leak.NativeHeapLeakBitmap;
 import com.example.leak.NativeHeapLeakMalloc;
 import com.example.utils.MemoryUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,6 +31,9 @@ public class NativeHeapImitationBitmap extends AppCompatActivity implements View
     private TextView tv1;
     private TextView tv2;
     private boolean isImitating;
+    public static List<Bitmap> vec;
+    private NativeHeapLeakBitmap leak;
+    private NativeHeapLeakBitmapThread t;
 //    private long maxHeapSize;
 //    private long tmpHeapSize;
 //
@@ -37,6 +43,9 @@ public class NativeHeapImitationBitmap extends AppCompatActivity implements View
     private class NativeHeapLeakBitmapThread extends Thread {
         private final Timer timer = new Timer();
         public void run() {
+            tv1.setText(String.valueOf(MemoryUtils.getNativeHeap()));
+            tv2.setText(String.valueOf(MemoryUtils.getPssMemory()));
+            MemoryUtils.MemoryInfoLog();
             int amount = Integer.parseInt(edt1.getText().toString());
             int time = Integer.parseInt(edt2.getText().toString());
 //            btn2.post(new Runnable() {
@@ -57,13 +66,14 @@ public class NativeHeapImitationBitmap extends AppCompatActivity implements View
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    tv1.setText(String.valueOf(Debug.getNativeHeapAllocatedSize()/(1024*1024)));
-                    tv2.setText(String.valueOf(MemoryUtils.getPssMemory()/1024));
+                    tv1.setText(String.valueOf(MemoryUtils.getNativeHeap()));
+                    tv2.setText(String.valueOf(MemoryUtils.getPssMemory()));
+                    MemoryUtils.MemoryInfoLog();
                 }
-            }, 5000L, 5000L);
+            }, 1000L, 1000L);
             int need;
             //5s泄漏量
-            need = amount / time * 5;
+            need = amount / time;
             while(amount > 0 && isImitating) {
                 if(amount >= need) {
                     amount -= need;
@@ -73,13 +83,18 @@ public class NativeHeapImitationBitmap extends AppCompatActivity implements View
                     amount = 0;
                 }
                 for(int i = 0; i < need; ++i) {
-                    NativeHeapLeakBitmap.toLeak();
+                    leak.toLeak();
                 }
                 try {
-                    Thread.sleep(5000L);
+                    Thread.sleep(1000L);
                 } catch (InterruptedException e) {
                     System.err.println("sleep() 函数抛出了 InterruptedException 异常：" + e.getMessage());
                 }
+            }
+            try {
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                System.err.println("sleep() 函数抛出了 InterruptedException 异常：" + e.getMessage());
             }
             timer.cancel();
         }
@@ -108,9 +123,9 @@ public class NativeHeapImitationBitmap extends AppCompatActivity implements View
         isImitating = false;
 //        maxHeapSize = Debug.getNativeHeapSize()/1000000;
 //        tmpHeapSize = maxHeapSize;
-        NativeHeapLeakBitmap.vec = new ArrayList<>();
-        tv1.setText(String.valueOf(Debug.getNativeHeapAllocatedSize()/(1024*1024)));
-        tv2.setText(String.valueOf(MemoryUtils.getPssMemory()/1024));
+//        vec = new ArrayList<>();
+        tv1.setText(String.valueOf(MemoryUtils.getNativeHeap()));
+        tv2.setText(String.valueOf(MemoryUtils.getPssMemory()));
 
     }
 
@@ -120,7 +135,9 @@ public class NativeHeapImitationBitmap extends AppCompatActivity implements View
             finish();
         }
         else if(v.getId() == R.id.start){
-            NativeHeapLeakBitmapThread t = new NativeHeapLeakBitmapThread();
+            leak = new NativeHeapLeakBitmap();
+            vec = new ArrayList<>();
+            t = new NativeHeapLeakBitmapThread();
             t.start();
 //            btn1.setEnabled(false);
 //            btn2.setEnabled(true);
@@ -146,9 +163,16 @@ public class NativeHeapImitationBitmap extends AppCompatActivity implements View
 //            }
 //            memoryBlocks.clear();
 //            tmpHeapSize = maxHeapSize;
-            NativeHeapLeakBitmap.toReclaim();
-            tv1.setText(String.valueOf(Debug.getNativeHeapAllocatedSize()/(1024*1024)));
-            tv2.setText(String.valueOf(MemoryUtils.getPssMemory()/1024));
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                System.err.println("join() 函数抛出了 InterruptedException 异常：" + e.getMessage());
+            }
+            leak.toReclaim();
+            leak = null;
+            Runtime.getRuntime().gc();
+            tv1.setText(String.valueOf(MemoryUtils.getNativeHeap()));
+            tv2.setText(String.valueOf(MemoryUtils.getPssMemory()));
             btn1.setEnabled(true);
             btn2.setEnabled(false);
         }
