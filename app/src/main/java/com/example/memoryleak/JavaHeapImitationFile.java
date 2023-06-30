@@ -3,6 +3,7 @@ package com.example.memoryleak;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import com.example.leak.JavaHeapLeakFile;
 import com.example.utils.MemoryUtils;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -40,8 +42,11 @@ public class JavaHeapImitationFile extends AppCompatActivity implements View.OnC
             MemoryUtils.MemoryInfoLog();
             int amount = Integer.parseInt(edt1.getText().toString());
             int time = Integer.parseInt(edt2.getText().toString()) ;
-            if(amount  > 200)
-                amount = 200;
+            if(amount  > MemoryUtils.getMaxJavaHeap()) {
+                amount = (int)(MemoryUtils.getMaxJavaHeap())-5;
+                String MaxJavaHeapSize = String.format(Locale.US, "MaxJavaHeap-size : %d MB", amount);
+                Log.i("MaxJavaHeap", MaxJavaHeapSize);
+            }
 //            btn2.post(new Runnable() {
 //                @Override
 //                public void run() {

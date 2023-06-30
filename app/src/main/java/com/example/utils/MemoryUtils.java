@@ -19,6 +19,9 @@ public class MemoryUtils {
         Debug.getMemoryInfo(memoryInfo);
         return memoryInfo.getTotalPss()/1024;
     }
+    public static long getMaxJavaHeap() {
+        return (Runtime.getRuntime().maxMemory()-Runtime.getRuntime().freeMemory())/(1024*1024);
+    }
     public static void MemoryInfoLog() {
         String JavaHeapSize = String.format(Locale.US, "JavaHeap-size : %d MB", getJavaHeap());
         Log.i("JavaHeap", JavaHeapSize);

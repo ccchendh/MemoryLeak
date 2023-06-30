@@ -6,7 +6,7 @@ import java.util.List;
 
 public class JavaHeapLeakInnerClass {
 
-    public class Test{
+    class Test{
         char[] c = new char[1024 * 512];
     };
     public  void toLeak () {
