@@ -15,21 +15,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
 
-        Button btn1 = findViewById(R.id.JavaHeap);
+        Button btn1 = findViewById(R.id.JavaHeap_imitation);
         Button btn2 = findViewById(R.id.NativeHeap_imitation);
+        Button btn3 = findViewById(R.id.GPU_imitation);
 
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
+        btn3.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View v){
-        if(v.getId() == R.id.JavaHeap){
+        if(v.getId() == R.id.JavaHeap_imitation){
             startActivity(new Intent(this, JavaHeap.class));
         }
-        else{
+        else if(v.getId() == R.id.NativeHeap_imitation){
             startActivity(new Intent(this, NativeHeap.class));
+        }
+        else{
+            startActivity(new Intent(this, GPUImitation.class));
         }
     }
 }

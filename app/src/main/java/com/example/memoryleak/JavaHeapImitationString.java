@@ -3,6 +3,7 @@ package com.example.memoryleak;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.system.Os;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -49,6 +50,7 @@ public class JavaHeapImitationString extends AppCompatActivity implements View.O
                 String MaxJavaHeapSize = String.format(Locale.US, "MaxJavaHeap-size : %d MB", amount);
                 Log.i("MaxJavaHeap", MaxJavaHeapSize);
             }
+            Log.i("Thread info", "JavaHeapLeakStringThread: Process ID: " + Os.getpid() + ", Parent Process ID:" + Os.getppid() + ", Thread ID: " + Os.gettid());
 //            btn2.post(new Runnable() {
 //                @Override
 //                public void run() {

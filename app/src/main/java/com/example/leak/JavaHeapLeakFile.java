@@ -13,30 +13,29 @@ import java.util.List;
 
 public class JavaHeapLeakFile {
 
-    public static List<BufferedInputStream> vec;
+    public static List<BufferedOutputStream> vec;
 
     public static void toLeak() throws RuntimeException{
-//        try {
-//            InputStream os = Thread.currentThread().getContextClassLoader().getResourceAsStream("com/example/leak/a.txt");
-            // File file = new File("a.txt");
-            // InputStream os = new FileInputStream(file);
-            BufferedInputStream Bufos = new BufferedInputStream(null, 1024*1024);
-//            os.close();
-            vec.add(Bufos);
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
+        BufferedOutputStream Bufos = new BufferedOutputStream(System.out, 1024*1024);
+//        byte[] data = new byte[1024 * 512];
+//        try{
+//            Bufos.write(data);
+//        }catch (IOException e) {
+//            System.err.println("write() 函数抛出了 IOException 异常：" + e.getMessage());
 //        }
+//            os.close();
+        vec.add(Bufos);
     }
 
 
     public static void toReclaim() {
-        for(BufferedInputStream os : vec) {
+        for(BufferedOutputStream os : vec) {
             try {
                 os.close();
             } catch (IOException e) {
                 System.err.println("close() 函数抛出了 IOException 异常：" + e.getMessage());
+            } catch (NullPointerException e) {
+                System.err.println("close() 函数抛出了 NullPointerException 异常：" + e.getMessage());
             }
         }
         vec.clear();

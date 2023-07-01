@@ -11,7 +11,11 @@ public class JavaHeapLeakInnerClass {
     };
     public  void toLeak () {
         Test test= new Test();
+        char valueToFill = '\0'; // 填充数组的字符
 
+        for (int i = 0; i < test.c.length; i++) {
+            (test.c)[i] = valueToFill;
+        }
         JavaHeapImitationInnerclass.vec.add(test);
     }
 

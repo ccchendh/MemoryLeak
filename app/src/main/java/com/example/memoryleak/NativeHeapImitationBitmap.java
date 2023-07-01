@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Debug;
+import android.system.Os;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,6 +50,7 @@ public class NativeHeapImitationBitmap extends AppCompatActivity implements View
             MemoryUtils.MemoryInfoLog();
             int amount = Integer.parseInt(edt1.getText().toString());
             int time = Integer.parseInt(edt2.getText().toString());
+            Log.i("Thread info", "NativeHeapLeakBitmapThread: Process ID: " + Os.getpid() + ", Parent Process ID:" + Os.getppid() + ", Thread ID: " + Os.gettid());
 //            btn2.post(new Runnable() {
 //                @Override
 //                public void run() {
