@@ -17,12 +17,12 @@ public class JavaHeapLeakFile {
 
     public static void toLeak() throws RuntimeException{
         BufferedOutputStream Bufos = new BufferedOutputStream(System.out, 1024*1024);
-//        byte[] data = new byte[1024 * 512];
-//        try{
-//            Bufos.write(data);
-//        }catch (IOException e) {
-//            System.err.println("write() 函数抛出了 IOException 异常：" + e.getMessage());
-//        }
+        byte[] data = new byte[1024 * 1000];
+        try{
+            Bufos.write(data);
+        }catch (IOException e) {
+            System.err.println("write() 函数抛出了 IOException 异常：" + e.getMessage());
+        }
 //            os.close();
         vec.add(Bufos);
     }
