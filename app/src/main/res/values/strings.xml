@@ -15,9 +15,12 @@
     <string name="end">结束测试</string>
     <string name="JavaHeap_tmp_amount">当前JavaHeap大小: </string>
     <string name="NativeHeap_tmp_amount">当前NativeHeap大小: </string>
-    <string name="PSS_tmp_time">当前PSS内存大小: </string>
+    <string name="PSS_tmp_amount">当前PSS内存大小: </string>
     <string name="GPU_imitation">模拟GPU内存泄漏</string>
+    <string name="Graphics_tmp_amount">当前Graphics内存大小: </string>
     <string name="blank">   </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

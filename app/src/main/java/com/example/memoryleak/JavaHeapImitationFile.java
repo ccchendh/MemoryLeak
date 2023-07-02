@@ -22,18 +22,20 @@ import java.util.TimerTask;
 public class JavaHeapImitationFile extends AppCompatActivity implements View.OnClickListener{
 
     private Button btn1;
+
     private Button btn2;
+
     private EditText edt1;
+
     private EditText edt2;
+
     private TextView tv1;
+
     private TextView tv2;
+
     private boolean isImitating;
 
     private JavaHeapLeakFileThread t;
-
-//    private long maxHeapSize;
-//    private long tmpHeapSize;
-//    private List<String> list;
 
     private class JavaHeapLeakFileThread extends Thread {
         private final Timer timer = new Timer();
@@ -41,6 +43,7 @@ public class JavaHeapImitationFile extends AppCompatActivity implements View.OnC
             tv1.setText(String.valueOf(MemoryUtils.getJavaHeap()));
             tv2.setText(String.valueOf(MemoryUtils.getPssMemory()));
             MemoryUtils.MemoryInfoLog();
+
             int amount = Integer.parseInt(edt1.getText().toString());
             int time = Integer.parseInt(edt2.getText().toString()) ;
             if(amount  > MemoryUtils.getMaxJavaHeap()) {
@@ -49,20 +52,10 @@ public class JavaHeapImitationFile extends AppCompatActivity implements View.OnC
                 Log.i("MaxJavaHeap", MaxJavaHeapSize);
             }
             Log.i("Thread info", "JavaHeapLeakFileThread: Process ID: " + Os.getpid() + ", Parent Process ID:" + Os.getppid() + ", Thread ID: " + Os.gettid());
-//            btn2.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    btn2.setEnabled(true);
-//                }
-//            });
-//            btn1.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    btn1.setEnabled(false);
-//                }
-//            });
+
             btn1.post(() -> btn1.setEnabled(false));
             btn2.post(() -> btn2.setEnabled(true));
+
             isImitating = true;
             timer.schedule(new TimerTask() {
                 @Override
@@ -72,8 +65,9 @@ public class JavaHeapImitationFile extends AppCompatActivity implements View.OnC
                     MemoryUtils.MemoryInfoLog();
                 }
             }, 1000L, 1000L);
+
             int need;
-            //5s泄漏量
+            //1s泄漏量
             need = amount / time;
             while(amount > 0 && isImitating) {
                 if(amount >= need) {
@@ -97,11 +91,13 @@ public class JavaHeapImitationFile extends AppCompatActivity implements View.OnC
                     System.err.println("sleep() 函数抛出了 InterruptedException 异常：" + e.getMessage());
                 }
             }
+
             try {
                 Thread.sleep(1000L);
             } catch (InterruptedException e) {
                 System.err.println("sleep() 函数抛出了 InterruptedException 异常：" + e.getMessage());
             }
+
             timer.cancel();
         }
     }
@@ -125,11 +121,11 @@ public class JavaHeapImitationFile extends AppCompatActivity implements View.OnC
         back.setOnClickListener(this);
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
-//        list = new ArrayList<>();
+
         JavaHeapLeakFile.vec = new ArrayList<>();
+
         isImitating = false;
-//        maxHeapSize = (Runtime.getRuntime().totalMemory()/(1024*1024));
-//        tmpHeapSize = maxHeapSize;
+
         tv1.setText(String.valueOf(MemoryUtils.getJavaHeap()));
         tv2.setText(String.valueOf(MemoryUtils.getPssMemory()));
 
@@ -144,35 +140,22 @@ public class JavaHeapImitationFile extends AppCompatActivity implements View.OnC
         else if(v.getId() == R.id.start){
             t = new JavaHeapLeakFileThread();
             t.start();
-//            btn1.setEnabled(false);
-//            btn2.setEnabled(true);
-//            Timer timer = new Timer();
-//            timer.schedule(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    tv1.setText(String.valueOf((Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory())/(1024*1024)));
-//                }
-//            }, 5000L, 5000L);
-//            int amount = Integer.parseInt(edt1.getText().toString());
-//            int time = Integer.parseInt(edt2.getText().toString());
-//            try {
-//                leak.toLeak(amount, time);
-//            } catch (InterruptedException e) {
-//                System.err.println("toLeak() 函数抛出了 InterruptedException 异常：" + e.getMessage());
-//            }
         }
         else{
             isImitating = false;
-//            tmpHeapSize = maxHeapSize;
+
             try {
                 t.join();
             } catch (InterruptedException e) {
                 System.err.println("join() 函数抛出了 InterruptedException 异常：" + e.getMessage());
             }
+
             JavaHeapLeakFile.toReclaim();
             Runtime.getRuntime().gc();
+
             tv1.setText(String.valueOf(MemoryUtils.getJavaHeap()));
             tv2.setText(String.valueOf(MemoryUtils.getPssMemory()));
+
             btn1.setEnabled(true);
             btn2.setEnabled(false);
         }

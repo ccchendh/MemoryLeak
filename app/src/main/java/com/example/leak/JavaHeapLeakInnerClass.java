@@ -9,6 +9,7 @@ public class JavaHeapLeakInnerClass {
     class Test{
         char[] c = new char[1024 * 512];
     };
+
     public  void toLeak () {
         Test test= new Test();
         char valueToFill = '\0'; // 填充数组的字符

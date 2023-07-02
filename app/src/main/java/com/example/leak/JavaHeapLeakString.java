@@ -17,25 +17,7 @@ public class JavaHeapLeakString {
 
         JavaHeapImitationString.vec.add(s);
     }
-//    public void toLeak(int count, int time) throws InterruptedException {
-//        vec = new ArrayList<>();
-//        int need = 0;
-//        //5s泄漏量
-//        need = count / time * 5;
-//        while(count > 0) {
-//            if(count >= need) {
-//                count -= need;
-//            } else {
-//                //最后一次泄漏量
-//                need = count;
-//                count = 0;
-//            }
-//            for(int i = 0; i < need; ++i) {
-//                excute();
-//            }
-//            Thread.sleep(5000L);
-//        }
-//    }
+
     public void toReclaim() {
         JavaHeapImitationString.vec.clear();
         JavaHeapImitationString.vec = null;

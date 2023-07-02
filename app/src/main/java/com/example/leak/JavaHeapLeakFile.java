@@ -23,10 +23,8 @@ public class JavaHeapLeakFile {
         }catch (IOException e) {
             System.err.println("write() 函数抛出了 IOException 异常：" + e.getMessage());
         }
-//            os.close();
         vec.add(Bufos);
     }
-
 
     public static void toReclaim() {
         for(BufferedOutputStream os : vec) {
