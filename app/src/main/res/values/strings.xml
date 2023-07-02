@@ -18,6 +18,8 @@
     <string name="PSS_tmp_amount">当前PSS内存大小: </string>
     <string name="GPU_imitation">模拟GPU内存泄漏</string>
     <string name="Graphics_tmp_amount">当前Graphics内存大小: </string>
+    <string name="ION_imitation">模拟ION内存泄漏</string>
+    <string name="ION_tmp_amount">当前ION内存大小: </string>
     <string name="blank">   </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

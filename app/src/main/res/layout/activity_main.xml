@@ -57,10 +57,10 @@
         android:gravity="top|center">
 
         <Button
-            android:id="@+id/GPU_imitation"
+            android:id="@+id/ION_imitation"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="@string/GPU_imitation"
+            android:text="@string/ION_imitation"
             android:textSize="20sp"
             android:textAllCaps="false"/>
 
