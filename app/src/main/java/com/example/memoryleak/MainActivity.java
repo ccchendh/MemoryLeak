@@ -17,11 +17,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btn1 = findViewById(R.id.JavaHeap_imitation);
         Button btn2 = findViewById(R.id.NativeHeap_imitation);
-        Button btn3 = findViewById(R.id.ION_imitation);
+//        Button btn3 = findViewById(R.id.ION_imitation);
 
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
-        btn3.setOnClickListener(this);
+//        btn3.setOnClickListener(this);
 
     }
 
@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if(v.getId() == R.id.NativeHeap_imitation){
             startActivity(new Intent(this, NativeHeap.class));
         }
-        else{
-            startActivity(new Intent(this, IonImitation.class));
-        }
+//        else{
+//            startActivity(new Intent(this, IonImitation.class));
+//        }
     }
 }
