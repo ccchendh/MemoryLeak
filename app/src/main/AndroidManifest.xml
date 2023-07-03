@@ -13,12 +13,6 @@
         android:largeHeap="true"
         tools:targetApi="31">
         <activity
-            android:name=".IonImitation"
-            android:exported="false" />
-        <activity
-            android:name=".GPUImitation"
-            android:exported="false" />
-        <activity
             android:name=".NativeHeapImitationMalloc"
             android:exported="false" />
         <activity
