@@ -1,0 +1,41 @@
+@startuml
+class com.example.leak.NativeHeapJNI {
++ {static} long m_malloc(int)
++ {static} void m_free(long)
+}
+class com.example.leak.NativeHeapLeakBitmap {
++ void toLeak()
++ void toReclaim()
+}
+class com.example.leak.JavaHeapLeakInnerClass {
++ void toLeak()
++ void toReclaim()
+}
+class com.example.leak.JavaHeapLeakInnerClass$Test {
+~ char[] c
+}
+class com.example.leak.NativeHeapLeakMalloc {
++ {static} List<Long> vec
++ {static} void toLeak()
++ {static} void toReclaim()
+}
+class com.example.leak.JavaHeapLeakFile {
++ {static} List<BufferedOutputStream> vec
++ {static} void toLeak()
++ {static} void toReclaim()
+}
+class com.example.leak.Leak {
+}
+class com.example.leak.JavaHeapLeakString {
++ void toLeak()
++ void toReclaim()
+}
+
+
+com.example.leak.Leak <|-- com.example.leak.NativeHeapLeakBitmap
+com.example.leak.Leak <|-- com.example.leak.JavaHeapLeakInnerClass
+com.example.leak.JavaHeapLeakInnerClass +.. com.example.leak.JavaHeapLeakInnerClass$Test
+com.example.leak.Leak <|-- com.example.leak.NativeHeapLeakMalloc
+com.example.leak.Leak <|-- com.example.leak.JavaHeapLeakFile
+com.example.leak.Leak <|-- com.example.leak.JavaHeapLeakString
+@enduml

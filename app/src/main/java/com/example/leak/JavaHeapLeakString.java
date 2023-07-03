@@ -4,7 +4,7 @@ import com.example.memoryleak.JavaHeapImitationString;
 
 import java.util.List;
 
-public class JavaHeapLeakString {
+public class JavaHeapLeakString extends Leak {
 
     public void toLeak () {
 

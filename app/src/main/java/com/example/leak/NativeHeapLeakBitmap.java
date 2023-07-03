@@ -7,7 +7,7 @@ import com.example.memoryleak.NativeHeapImitationBitmap;
 import java.nio.ByteBuffer;
 import java.util.List;
 
-public class NativeHeapLeakBitmap {
+public class NativeHeapLeakBitmap extends Leak{
 
     public void toLeak () {
         int targetSize = 1024 * 1024; // 1MB

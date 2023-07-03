@@ -4,7 +4,7 @@ import com.example.memoryleak.JavaHeapImitationInnerclass;
 
 import java.util.List;
 
-public class JavaHeapLeakInnerClass {
+public class JavaHeapLeakInnerClass extends Leak {
 
     class Test{
         char[] c = new char[1024 * 512];

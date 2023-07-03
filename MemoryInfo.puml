@@ -1,0 +1,9 @@
+@startuml
+class com.example.utils.MemoryUtils {
++ {static} long getJavaHeap()
++ {static} long getNativeHeap()
++ {static} long getPssMemory()
++ {static} long getMaxJavaHeap()
++ {static} void MemoryInfoLog()
+}
+@enduml

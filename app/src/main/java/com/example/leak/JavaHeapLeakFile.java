@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-public class JavaHeapLeakFile {
+public class JavaHeapLeakFile extends Leak{
 
     public static List<BufferedOutputStream> vec;
 

@@ -1,0 +1,58 @@
+@startuml
+class com.example.memoryleak.MainActivity {
+# void onCreate(Bundle)
++ void onClick(View)
+}
+class com.example.memoryleak.NativeHeapImitationMalloc {
+- Button btn1
+- Button btn2
+- EditText edt1
+- EditText edt2
+- TextView tv1
+- TextView tv2
+- boolean isImitating
+- NativeHeapLeakMallocThread t
+# void onCreate(Bundle)
++ void onClick(View)
+}
+class com.example.memoryleak.NativeHeapImitationMalloc$NativeHeapLeakMallocThread {
+- Timer timer
++ void run()
+}
+class com.example.memoryleak.NativeHeapImitationBitmap {
+- Button btn1
+- Button btn2
+- EditText edt1
+- EditText edt2
+- TextView tv1
+- TextView tv2
+- boolean isImitating
++ {static} List<Bitmap> vec
+- NativeHeapLeakBitmap leak
+- NativeHeapLeakBitmapThread t
+# void onCreate(Bundle)
++ void onClick(View)
+}
+class com.example.memoryleak.NativeHeapImitationBitmap$NativeHeapLeakBitmapThread {
+- Timer timer
++ void run()
+}
+class com.example.memoryleak.NativeHeap {
+# void onCreate(Bundle)
++ void onClick(View)
+}
+
+
+com.example.memoryleak.OnClickListener <|.. com.example.memoryleak.MainActivity
+androidx.appcompat.app.AppCompatActivity <|-- com.example.memoryleak.MainActivity
+com.example.memoryleak.OnClickListener <|.. com.example.memoryleak.NativeHeapImitationMalloc
+androidx.appcompat.app.AppCompatActivity <|-- com.example.memoryleak.NativeHeapImitationMalloc
+com.example.memoryleak.NativeHeapImitationMalloc +.. com.example.memoryleak.NativeHeapImitationMalloc$NativeHeapLeakMallocThread
+com.example.memoryleak.Thread <|-- com.example.memoryleak.NativeHeapImitationMalloc$NativeHeapLeakMallocThread
+com.example.memoryleak.OnClickListener <|.. com.example.memoryleak.NativeHeapImitationBitmap
+androidx.appcompat.app.AppCompatActivity <|-- com.example.memoryleak.NativeHeapImitationBitmap
+com.example.memoryleak.NativeHeapImitationBitmap +.. com.example.memoryleak.NativeHeapImitationBitmap$NativeHeapLeakBitmapThread
+com.example.memoryleak.Thread <|-- com.example.memoryleak.NativeHeapImitationBitmap$NativeHeapLeakBitmapThread
+com.example.memoryleak.OnClickListener <|.. com.example.memoryleak.NativeHeap
+androidx.appcompat.app.AppCompatActivity <|-- com.example.memoryleak.NativeHeap
+@enduml

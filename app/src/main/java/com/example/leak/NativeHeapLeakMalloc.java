@@ -3,7 +3,7 @@ package com.example.leak;
 
 import java.util.List;
 
-public class NativeHeapLeakMalloc {
+public class NativeHeapLeakMalloc extends Leak {
     public static List<Long> vec;
 
     public static void toLeak () {

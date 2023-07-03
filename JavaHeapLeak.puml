@@ -1,0 +1,80 @@
+@startuml
+class com.example.memoryleak.MainActivity {
+# void onCreate(Bundle)
++ void onClick(View)
+}
+class com.example.memoryleak.JavaHeap {
+# void onCreate(Bundle)
++ void onClick(View)
+}
+class com.example.memoryleak.JavaHeapImitationFile {
+- Button btn1
+- Button btn2
+- EditText edt1
+- EditText edt2
+- TextView tv1
+- TextView tv2
+- boolean isImitating
+- JavaHeapLeakFileThread t
+# void onCreate(Bundle)
++ void onClick(View)
+}
+class com.example.memoryleak.JavaHeapImitationFile$JavaHeapLeakFileThread {
+- Timer timer
++ void run()
+}
+class com.example.memoryleak.JavaHeapImitationString {
+- Button btn1
+- Button btn2
+- EditText edt1
+- EditText edt2
+- TextView tv1
+- TextView tv2
+- boolean isImitating
++ {static} List<char[]> vec
+- JavaHeapLeakString leak
+- JavaHeapLeakStringThread t
+# void onCreate(Bundle)
++ void onClick(View)
+}
+class com.example.memoryleak.JavaHeapImitationString$JavaHeapLeakStringThread {
+- Timer timer
++ void run()
+}
+class com.example.memoryleak.JavaHeapImitationInnerclass {
+- Button btn1
+- Button btn2
+- EditText edt1
+- EditText edt2
+- TextView tv1
+- TextView tv2
+- boolean isImitating
++ {static} List<Object> vec
+- JavaHeapLeakInnerClass leak
+- JavaHeapLeakInnerClassThread t
+# void onCreate(Bundle)
++ void onClick(View)
+}
+class com.example.memoryleak.JavaHeapImitationInnerclass$JavaHeapLeakInnerClassThread {
+- Timer timer
++ void run()
+}
+
+
+com.example.memoryleak.OnClickListener <|.. com.example.memoryleak.MainActivity
+androidx.appcompat.app.AppCompatActivity <|-- com.example.memoryleak.MainActivity
+com.example.memoryleak.OnClickListener <|.. com.example.memoryleak.JavaHeap
+androidx.appcompat.app.AppCompatActivity <|-- com.example.memoryleak.JavaHeap
+com.example.memoryleak.OnClickListener <|.. com.example.memoryleak.JavaHeapImitationFile
+androidx.appcompat.app.AppCompatActivity <|-- com.example.memoryleak.JavaHeapImitationFile
+com.example.memoryleak.JavaHeapImitationFile +.. com.example.memoryleak.JavaHeapImitationFile$JavaHeapLeakFileThread
+com.example.memoryleak.Thread <|-- com.example.memoryleak.JavaHeapImitationFile$JavaHeapLeakFileThread
+com.example.memoryleak.OnClickListener <|.. com.example.memoryleak.JavaHeapImitationString
+androidx.appcompat.app.AppCompatActivity <|-- com.example.memoryleak.JavaHeapImitationString
+com.example.memoryleak.JavaHeapImitationString +.. com.example.memoryleak.JavaHeapImitationString$JavaHeapLeakStringThread
+com.example.memoryleak.Thread <|-- com.example.memoryleak.JavaHeapImitationString$JavaHeapLeakStringThread
+com.example.memoryleak.OnClickListener <|.. com.example.memoryleak.JavaHeapImitationInnerclass
+androidx.appcompat.app.AppCompatActivity <|-- com.example.memoryleak.JavaHeapImitationInnerclass
+com.example.memoryleak.JavaHeapImitationInnerclass +.. com.example.memoryleak.JavaHeapImitationInnerclass$JavaHeapLeakInnerClassThread
+com.example.memoryleak.Thread <|-- com.example.memoryleak.JavaHeapImitationInnerclass$JavaHeapLeakInnerClassThread
+@enduml
